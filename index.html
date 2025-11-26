@@ -101,12 +101,38 @@
   font-style: italic;
   color: #444;
 }
+
+.spice-container {
+  margin-top: 8px;
+  font-size: 13px;
+}
+
+.spice-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.spice-row label {
+  font-weight: normal;
+  font-size: 13px;
+  margin-right: 8px;
+}
+
+.spice-row select {
+  padding: 4px 6px;
+  font-size: 13px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
   </style>
 </head>
 <body>
 
   <h2>🍴 Aamchi Mumbai - Fresh and Homemade</h2>
-  <h2> Order for 22/11/2025</h2>
+  <h2> Order for 29/11/2025</h2>
 
   <!-- Customer Details -->
   <div class="product">
@@ -149,8 +175,10 @@
       <label>🍲 Butter Pav Bhaji (₹150 each)</label>
       <select id="butterPavBhajiQty" onchange="calculateBill()"></select>
     </div>
+    <!-- Per-item spice selector for Butter Pav Bhaji -->
+    <div id="bhajiSpiceContainer" class="spice-container"></div>
     <div class="menu-row">
-      <label>🧀 Extra Cheese (₹25 each)</label>
+      <label>🧀 Extra Cheese (₹15 each)</label>
       <select id="butterCheeseQty" onchange="calculateBill()"></select>
     </div>
     <div class="menu-row">
@@ -161,24 +189,27 @@
 
   <div class="product">
     <div class="menu-row">
-      <label>🥪 Grill Masala Club Sandwich (₹150 each)</label>
-      <select id="clubSandwichQty" onchange="calculateBill()"></select>
+      <label>🥘 Misal Pav (₹150 each)</label>
+      <select id="MisalpavQty" onchange="calculateBill()"></select>
     </div>
     <div class="menu-row">
-      <label>🧀 Extra Cheese (₹25 each)</label>
-      <select id="clubCheeseQty" onchange="calculateBill()"></select>
+      <label>🥘 Dahi Misal Pav (₹160 each)</label>
+      <select id="dahiMisalQty" onchange="calculateBill()"></select>
+    </div>
+    <!-- Per-item spice selector for Butter Pav Bhaji -->
+    <!-- <div id="misalSpiceContainer" class="spice-container"></div> -->
+    <div class="menu-row">
+      <label>🥖 Extra Pav (₹10 each)</label>
+      <select id="misalExtraPavQty" onchange="calculateBill()"></select>
     </div>
   </div>
 
   <div class="product">
     <div class="menu-row">
-      <label>🥔 Toast Aaloo Masala Sandwich (₹50 each)</label>
-      <select id="toastSandwichQty" onchange="calculateBill()"></select>
+      <label>🥤 The Better Thickshake (₹150 each)</label>
+      <select id="shakeQty" onchange="calculateBill()"></select>
     </div>
-    <div class="menu-row">
-      <label>🧀 Extra Cheese (₹25 each)</label>
-      <select id="toastCheeseQty" onchange="calculateBill()"></select>
-    </div>
+    <div id="shakeOptionsContainer" class="spice-container"></div>
   </div>
 
 <!-- Location Dropdown -->
@@ -201,12 +232,13 @@
 
   <!-- Bill Summary -->
   <div class="summary" id="billSummary">
+    <h3>Aamchi Mumbai</h3>
     <!-- Customer info FIRST, bold & bigger -->
     <p id="customerSummary" 
       style="font-size:16px; font-weight:bold; text-align:center; margin:0 0 8px;">
     </p>
 
-    <h3>🧾 Your Bill Summary for 22/11/2025</h3>
+    <h3>🧾 Your Bill Summary for 29/11/2025</h3>
     <table>
       <tbody id="billDetails"></tbody>
       <tr><td colspan="2"><hr></td></tr>
@@ -243,6 +275,8 @@
   <!-- html2canvas -->
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   <script>
+    let spiceSelections = {};  
+    let shakeSelections = {};
     function populateSelect(id, max) {
       const select = document.getElementById(id);
       if (!select) return;
@@ -257,8 +291,8 @@
 
     document.addEventListener("DOMContentLoaded", () => {
       ["butterPavBhajiQty","butterCheeseQty","extraPavQty",
-       "clubSandwichQty","clubCheeseQty",
-       "toastSandwichQty","toastCheeseQty"].forEach(id => populateSelect(id, 100));
+       "MisalpavQty","dahiMisalQty","misalExtraPavQty","curdQty",
+       "toastSandwichQty","toastCheeseQty","shakeQty"].forEach(id => populateSelect(id, 100));
       calculateBill();
       const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
       document.getElementById("mobileHint").style.display = isMobile ? "none" : "block";
@@ -297,6 +331,112 @@ document.getElementById("locationDropdown").addEventListener("change", function(
 
       summaryEl.textContent = text;
     }
+  // Create per-item thickshake dropdowns for a given item
+  function updateShakeSelectors(qty) {
+  const container = document.getElementById("shakeOptionsContainer");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  for (let i = 1; i <= qty; i++) {
+    const row = document.createElement("div");
+    row.className = "spice-row";
+
+    const label = document.createElement("label");
+    label.textContent = `Thickshake #${i}:`;
+
+    const select = document.createElement("select");
+    select.dataset.item = "shake";
+    select.dataset.index = i;
+
+    const optPlain = new Option("🥤 Plain", "plain");
+    const optKitkat = new Option("🍫 KitKat", "kitkat");
+
+    select.appendChild(optPlain);
+    select.appendChild(optKitkat);
+
+    // restore if saved before
+    const key = `shake_${i}`;
+    if (shakeSelections[key]) {
+      select.value = shakeSelections[key];
+    }
+
+    select.addEventListener("change", function() {
+      shakeSelections[key] = this.value;
+      calculateBill();
+    });
+
+    row.appendChild(label);
+    row.appendChild(select);
+    container.appendChild(row);
+  }
+}
+
+  // Create per-item spice dropdowns for a given item
+  function updateSpiceSelectors(itemKey, qty, containerId, labelBase) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  for (let i = 1; i <= qty; i++) {
+    const row = document.createElement("div");
+    row.className = "spice-row";
+
+    const label = document.createElement("label");
+    label.textContent = `${labelBase} #${i} spice:`;
+
+    const select = document.createElement("select");
+    select.dataset.item = itemKey;
+    select.dataset.index = i;
+
+    const optSpicy = new Option("Spicy (default)", "spicy");
+    const optKids = new Option("Kids-friendly", "kids");
+
+    select.appendChild(optSpicy);
+    select.appendChild(optKids);
+
+    // restore saved selection if exists
+    const key = `${itemKey}_${i}`;
+    if (spiceSelections[key]) {
+      select.value = spiceSelections[key];
+    }
+
+    // save when user changes
+    select.addEventListener("change", function() {
+      spiceSelections[key] = this.value;
+      calculateBill();
+    });
+
+    row.appendChild(label);
+    row.appendChild(select);
+    container.appendChild(row);
+  }
+}
+
+  // Count spicy vs kids choices for an item
+  function getSpiceSummary(itemKey) {
+    const selects = document.querySelectorAll(`select[data-item="${itemKey}"]`);
+    let spicyCount = 0;
+    let kidsCount = 0;
+
+    selects.forEach(sel => {
+      if (sel.value === "kids") {
+        kidsCount++;
+      } else {
+        spicyCount++;  // default
+      }
+    });
+
+    return { spicyCount, kidsCount, total: selects.length };
+  }
+
+  // Add a small info row under the main item line in the bill
+  function addInfoRow(text, billDetails) {
+    const row = document.createElement("tr");
+    row.innerHTML = `<td colspan="2" style="font-size:13px; color:#555; padding-left:12px;">${text}</td>`;
+    billDetails.appendChild(row);
+  }
 
   function calculateBill() {
   const getVal = (id) => {
@@ -308,13 +448,16 @@ document.getElementById("locationDropdown").addEventListener("change", function(
     bhaji: getVal("butterPavBhajiQty"),
     bhajiCheese: getVal("butterCheeseQty"),
     pav: getVal("extraPavQty"),
-    club: getVal("clubSandwichQty"),
-    clubCheese: getVal("clubCheeseQty"),
+    club: getVal("MisalpavQty"),
+    dmisal: getVal("dahiMisalQty"),
+    misalpavextra: getVal("misalExtraPavQty"),
+    // clubcurd: getVal("curdQty"),
+    tshake: getVal("shakeQty"),
     toast: getVal("toastSandwichQty"),
     toastCheese: getVal("toastCheeseQty")
   };
 
-  const P = { bhaji: 150, cheese: 25, pav: 10, club: 150, toast: 50 };
+  const P = { bhaji: 150, cheese: 15, pav: 10, club: 150, toast: 50, curd: 10, shake: 150, dahimisal: 160 };
 
   const billDetails = document.getElementById("billDetails");
   billDetails.innerHTML = "";
@@ -329,14 +472,55 @@ document.getElementById("locationDropdown").addEventListener("change", function(
       billDetails.appendChild(row);
     }
   }
-
+  
+  // Update spice selectors based on quantities
+  updateSpiceSelectors("bhaji", q.bhaji, "bhajiSpiceContainer", "Pav Bhaji");
+  // updateSpiceSelectors("misal", q.club, "misalSpiceContainer", "Misal Pav");
+  updateShakeSelectors(q.tshake);
+  
   addRow("🍲","Butter Pav Bhaji",q.bhaji,P.bhaji);
   addRow("🧀","Extra Cheese (Bhaji)",q.bhajiCheese,P.cheese);
   addRow("🥖","Extra Pav",q.pav,P.pav);
-  addRow("🥪","Grill Masala Club Sandwich",q.club,P.club);
-  addRow("🧀","Extra Cheese (Club)",q.clubCheese,P.cheese);
-  addRow("🥔","Toast Aaloo Masala Sandwich",q.toast,P.toast);
-  addRow("🧀","Extra Cheese (Toast)",q.toastCheese,P.cheese);
+  addRow("🥘","Misal Pav",q.club,P.club);
+  addRow("🥘","Dahi Misal Pav",q.dmisal,P.dahimisal);
+  addRow("🥖","Extra Pav (Misal)",q.misalpavextra,P.pav);
+  // addRow("🥛","Extra Curd",q.clubcurd,P.curd);
+  addRow("🥤","The Better Thickshake",q.tshake,P.shake);
+  // addRow("🥔","Toast Aaloo Masala Sandwich",q.toast,P.toast);
+  // addRow("🧀","Extra Cheese (Toast)",q.toastCheese,P.cheese);
+
+  // Spice summaries
+  const bhajiSpice = getSpiceSummary("bhaji");
+  if (bhajiSpice.total > 0) {
+    addInfoRow(
+      `• Pav Bhaji spice: ${bhajiSpice.spicyCount} Spicy, ${bhajiSpice.kidsCount} Kids-friendly`,
+      billDetails
+    );
+  }
+
+  // const misalSpice = getSpiceSummary("misal");
+  // if (misalSpice.total > 0) {
+  //   addInfoRow(
+  //     `• Misal Pav spice: ${misalSpice.spicyCount} Spicy, ${misalSpice.kidsCount} Kids-friendly`,
+  //     billDetails
+  //   );
+  // }
+
+  const shakeSelects = document.querySelectorAll(`select[data-item="shake"]`);
+  let plainCount = 0;
+  let kitkatCount = 0;
+
+  shakeSelects.forEach(sel => {
+    if (sel.value === "kitkat") kitkatCount++;
+    else plainCount++;
+  });
+
+  if (shakeSelects.length > 0) {
+    addInfoRow(
+      `• Thickshake flavor: ${plainCount} Plain, ${kitkatCount} KitKat`,
+      billDetails
+    );
+  }
 
   // Safe fallback for total
   const safeTotal = total > 0 ? total : 0;
@@ -349,7 +533,6 @@ document.getElementById("locationDropdown").addEventListener("change", function(
 
   const qrSection = document.getElementById("qrSection");
   const qrCode = document.getElementById("qrCode");
-
 
 if (safeTotal > 0) {
   qrSection.style.display = "block";
