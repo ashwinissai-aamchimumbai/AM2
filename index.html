@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Aamchi Mumbai - Fresh and Homemade</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #f9f9f9; text-align: center; padding: 40px; margin:0; }
+    h2 { color: #d35400; font-size: 28px; }
+
+    .product, .summary, .qr {
+      background: #fff;
+      padding: 20px;
+      margin: 15px auto;
+      width: 400px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      text-align: left;
+    }
+
+    /* Row layout for item + dropdown */
+    .menu-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .menu-row label {
+      flex: 1;
+      font-weight: bold;
+    }
+
+    /* Square, white, centered dropdowns */
+    .menu-row select {
+      width: 60px;
+      padding: 6px;
+      font-size: 15px;
+      border: 1px solid #ccc;
+      border-radius: 0;       /* square corners */
+      background: #fff;
+      text-align: center;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+    }
+
+    .summary h3, .qr h3 { margin-bottom: 10px; text-align: center; }
+    .summary table { width: 100%; border-collapse: collapse; }
+    .summary td { padding: 5px 0; font-size: 16px; }
+    .summary td:first-child { text-align: left; }
+    .summary td:last-child { text-align: right; }
+    .qr img { display:block; margin: 10px auto 0; border-radius: 10px; }
+    .qr .hint { font-size: 13px; color:#777; text-align:center; margin-top:6px; }
+    .actions { text-align:center; }
+    button { margin-top: 10px; padding: 8px 12px; border:none; border-radius:6px; background:#d35400; color:#fff; cursor:pointer; }
+    button:hover { background:#e67e22; }
+    .pay { background:#2e7d32; }
+    .pay:hover { background:#388e3c; }
+
+.qr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* centers content horizontally */
+  justify-content: center;
+  width: 100%;
+  max-width: 320px;      /* keeps it neat and consistent */
+  margin: 0 auto;        /* center inside parent */
+  padding: 12px;
+  box-sizing: border-box;
+  background: #f9f9f9;   /* optional: match your other boxes */
+  border-radius: 8px;    /* optional: rounded corners */
+}
+
+.qr input[type="file"] {
+  width: 100%;
+  max-width: 280px;      /* prevents overflow */
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+.location-section {
+  margin: 15px 0;
+  font-family: inherit;
+}
+
+.location-section label {
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+#locationDropdown {
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+#selectedLocation {
+  margin-top: 8px;
+  font-style: italic;
+  color: #444;
+}
+
+.spice-container {
+  margin-top: 8px;
+  font-size: 13px;
+}
+
+.spice-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.spice-row label {
+  font-weight: normal;
+  font-size: 13px;
+  margin-right: 8px;
+}
+
+.spice-row select {
+  padding: 4px 6px;
+  font-size: 13px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+  </style>
+</head>
+<body>
+
+  <h2>🍴 Aamchi Mumbai - Fresh and Homemade</h2>
+  <!-- <h2> Order for 29/11/2025</h2> -->
+
+  <!-- Customer Details -->
+  <div class="product">
+    <h3 style="text-align:center; margin-top:0;">Customer Details</h3>
+
+    <div class="menu-row">
+      <label for="customerNameInput">👤 Name</label>
+      <input 
+        id="customerNameInput" 
+        type="text" 
+        placeholder="Enter your name"
+        oninput="updateCustomerDetails()" 
+        style="flex:1; margin-left:10px; padding:6px; border:1px solid #ccc; border-radius:4px;"
+      />
+    </div>
+
+    <div class="menu-row">
+      <label for="customerPhoneInput">📞 Phone</label>
+      <input 
+        id="customerPhoneInput" 
+        type="tel" 
+        placeholder="10-digit mobile"
+        oninput="updateCustomerDetails()" 
+        style="flex:1; margin-left:10px; padding:6px; border:1px solid #ccc; border-radius:4px;"
+      />
+    </div>
+
+    <p style="font-size:12px; color:#b33; text-align:center; margin-top:6px;">
+      (*Name and Phone Number are mandatory*)
+    </p>
+    <p id="customerError" 
+      style="font-size:12px; color:#b33; text-align:center; margin-top:4px; display:none;">
+      Please enter your name and a valid 10-digit phone number to place the order.
+    </p>
+  </div>
+  
+  <!-- Menu Items -->
+  <!-- <div class="product">
+    <div class="menu-row">
+      <label>🍲 Butter Pav Bhaji (₹150 each)</label>
+      <select id="butterPavBhajiQty" onchange="calculateBill()"></select>
+    </div>
+    Per-item spice selector for Butter Pav Bhaji
+     <div id="bhajiSpiceContainer" class="spice-container"></div>
+    <div class="menu-row">
+      <label>🧀 Extra Cheese (₹15 each)</label>
+      <select id="butterCheeseQty" onchange="calculateBill()"></select>
+    </div>
+    <div class="menu-row">
+      <label>🥖 Extra Pav (₹10 each)</label>
+      <select id="extraPavQty" onchange="calculateBill()"></select>
+    </div>
+  </div> -->
+
+  <!-- <div class="product">
+    <div class="menu-row">
+      <label>🥘 Misal Pav (₹150 each)</label>
+      <select id="MisalpavQty" onchange="calculateBill()"></select>
+    </div>
+    <div class="menu-row">
+      <label>🥘 Dahi Misal Pav (₹160 each)</label>
+      <select id="dahiMisalQty" onchange="calculateBill()"></select>
+    </div>
+    <!Per-item spice selector for Butter Pav Bhaji -->
+    <!-- <div id="misalSpiceContainer" class="spice-container"></div> -->
+    <!-- <div class="menu-row">
+      <label>🥖 Extra Pav (₹10 each)</label>
+      <select id="misalExtraPavQty" onchange="calculateBill()"></select>
+    </div>
+  </div> -->
+
+  <div class="product">
+    <div class="menu-row">
+      <label>🥤 The Better Thickshake (₹150 each)</label>
+      <select id="shakeQty" onchange="calculateBill()"></select>
+    </div>
+    <div id="shakeOptionsContainer" class="spice-container"></div>
+  </div>
+
+<!-- Location Dropdown -->
+<div class="location-section">
+  <label for="locationDropdown">Select Location & Time:</label>
+  <select id="locationDropdown">
+    <option value="">-- Choose a location --</option>
+    <option value="Biotech 7.00 pm">Biotech 7.00 pm</option>
+    <option value="NAC-1 7.10 pm">NAC-1 7.10 pm</option>
+    <option value="CCD 7.20 pm">CCD 7.20 pm</option>
+    <option value="Sabarmati 7.30 pm">Sabarmati 7.30 pm</option>
+    <option value="OAT Student Gate 7.40 pm">OAT Student Gate 7.40 pm</option>
+    <option value="Tunga 7.50 pm">Tunga 7.50 pm</option>
+    <option value="Himalaya 8.00 pm">Himalaya 8.00 pm</option>
+    <option value="Pampa 8.10 pm">Pampa 8.10 pm</option>
+    <option value="Mandakini 8.20 pm">Mandakini 8.20 pm</option>
+    <option value="Other">Other</option>
+  </select>
+</div>
+
+  <!-- Bill Summary -->
+  <div class="summary" id="billSummary">
+    <h3>Aamchi Mumbai</h3>
+    <!-- Customer info FIRST, bold & bigger -->
+    <p id="customerSummary" 
+      style="font-size:16px; font-weight:bold; text-align:center; margin:0 0 8px;">
+    </p>
+
+    <!-- <h3>🧾 Your Bill Summary for 29/11/2025</h3> -->
+    <h3>🧾 Your Bill Summary</h3>
+    <table>
+      <tbody id="billDetails"></tbody>
+      <tr><td colspan="2"><hr></td></tr>
+      <tr>
+        <td><b>Total</b></td>
+        <td id="total"><b>₹0</b></td>
+      </tr>
+    </table>
+    <p id="orderInfo" style="font-size:14px; color:#555; margin-top:10px; text-align:center;"></p>
+  <!-- Location will appear here -->
+  <p id="selectedLocation"></p>
+  </div>
+
+  <!-- QR Code + UPI Deep Link -->
+  <div class="qr" id="qrSection" style="display:none;">
+    <h3>📲 Scan & Pay</h3>
+    <img id="qrCode" alt="Payment QR Code" width="250" height="250" />
+    
+
+  <!-- Upload Payment Screenshot -->
+  <div class="qr">
+    <h3>📤 Upload Payment Screenshot</h3>
+    <input type="file" id="paymentImage" accept="image/*" onchange="confirmPayment()" />
+    <p id="paymentStatus" style="color:green; font-weight:bold;"></p>
+  </div>
+
+  <!-- Actions -->
+  <div class="actions">
+    <button onclick="downloadReceipt()">🖼️ Save Bill as Image</button>
+    <button onclick="downloadConfirmedReceipt()">✅ Save Confirmed Receipt</button>
+    <p class="hint">Share the confirmed receipt with Aamchi Mumbai to process your order</p>
+  </div>
+
+  <!-- html2canvas -->
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <script>
+    let spiceSelections = {};  
+    let shakeSelections = {};
+    function populateSelect(id, max) {
+      const select = document.getElementById(id);
+      if (!select) return;
+      select.innerHTML = "";
+      for (let i = 0; i <= max; i++) {
+        const opt = document.createElement("option");
+        opt.value = i;
+        opt.textContent = i;
+        select.appendChild(opt);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      ["butterPavBhajiQty","butterCheeseQty","extraPavQty",
+       "MisalpavQty","dahiMisalQty","misalExtraPavQty","curdQty",
+       "toastSandwichQty","toastCheeseQty","shakeQty"].forEach(id => populateSelect(id, 100));
+      calculateBill();
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      document.getElementById("mobileHint").style.display = isMobile ? "none" : "block";
+    });
+
+
+document.getElementById("locationDropdown").addEventListener("change", function() {
+  const selected = this.value;
+  const locationDisplay = document.getElementById("selectedLocation");
+  
+  if (selected) {
+    locationDisplay.textContent = "📍 Location: " + selected;
+  } else {
+    locationDisplay.textContent = "";
+  }
+});
+
+
+  function updateCustomerDetails() {
+      const nameEl = document.getElementById("customerNameInput");
+      const phoneEl = document.getElementById("customerPhoneInput");
+      const summaryEl = document.getElementById("customerSummary");
+
+      if (!summaryEl) return;
+
+      const name = nameEl ? nameEl.value.trim() : "";
+      const phone = phoneEl ? phoneEl.value.trim() : "";
+
+      let text = "";
+
+      if (name || phone) {
+        text = "Customer: ";
+        if (name) text += name;
+        if (phone) text += name ? " · Phone: " + phone : "Phone: " + phone;
+      }
+
+      summaryEl.textContent = text;
+    }
+  // Create per-item thickshake dropdowns for a given item
+  function updateShakeSelectors(qty) {
+  const container = document.getElementById("shakeOptionsContainer");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  for (let i = 1; i <= qty; i++) {
+    const row = document.createElement("div");
+    row.className = "spice-row";
+
+    const label = document.createElement("label");
+    label.textContent = `Thickshake #${i}:`;
+
+    const select = document.createElement("select");
+    select.dataset.item = "shake";
+    select.dataset.index = i;
+
+    const optPlain = new Option("🥤 Plain", "plain");
+    const optKitkat = new Option("🍫 KitKat", "kitkat");
+
+    select.appendChild(optPlain);
+    select.appendChild(optKitkat);
+
+    // restore if saved before
+    const key = `shake_${i}`;
+    if (shakeSelections[key]) {
+      select.value = shakeSelections[key];
+    }
+
+    select.addEventListener("change", function() {
+      shakeSelections[key] = this.value;
+      calculateBill();
+    });
+
+    row.appendChild(label);
+    row.appendChild(select);
+    container.appendChild(row);
+  }
+}
+
+  // Create per-item spice dropdowns for a given item
+  function updateSpiceSelectors(itemKey, qty, containerId, labelBase) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  for (let i = 1; i <= qty; i++) {
+    const row = document.createElement("div");
+    row.className = "spice-row";
+
+    const label = document.createElement("label");
+    label.textContent = `${labelBase} #${i} spice:`;
+
+    const select = document.createElement("select");
+    select.dataset.item = itemKey;
+    select.dataset.index = i;
+
+    const optSpicy = new Option("Spicy (default)", "spicy");
+    const optKids = new Option("Kids-friendly", "kids");
+
+    select.appendChild(optSpicy);
+    select.appendChild(optKids);
+
+    // restore saved selection if exists
+    const key = `${itemKey}_${i}`;
+    if (spiceSelections[key]) {
+      select.value = spiceSelections[key];
+    }
+
+    // save when user changes
+    select.addEventListener("change", function() {
+      spiceSelections[key] = this.value;
+      calculateBill();
+    });
+
+    row.appendChild(label);
+    row.appendChild(select);
+    container.appendChild(row);
+  }
+}
+
+  // Count spicy vs kids choices for an item
+  function getSpiceSummary(itemKey) {
+    const selects = document.querySelectorAll(`select[data-item="${itemKey}"]`);
+    let spicyCount = 0;
+    let kidsCount = 0;
+
+    selects.forEach(sel => {
+      if (sel.value === "kids") {
+        kidsCount++;
+      } else {
+        spicyCount++;  // default
+      }
+    });
+
+    return { spicyCount, kidsCount, total: selects.length };
+  }
+
+  // Add a small info row under the main item line in the bill
+  function addInfoRow(text, billDetails) {
+    const row = document.createElement("tr");
+    row.innerHTML = `<td colspan="2" style="font-size:13px; color:#555; padding-left:12px;">${text}</td>`;
+    billDetails.appendChild(row);
+  }
+
+  function calculateBill() {
+  const getVal = (id) => {
+    const el = document.getElementById(id);
+    return el ? +el.value : 0;
+  };
+
+  const q = {
+    bhaji: getVal("butterPavBhajiQty"),
+    bhajiCheese: getVal("butterCheeseQty"),
+    pav: getVal("extraPavQty"),
+    club: getVal("MisalpavQty"),
+    dmisal: getVal("dahiMisalQty"),
+    misalpavextra: getVal("misalExtraPavQty"),
+    // clubcurd: getVal("curdQty"),
+    tshake: getVal("shakeQty"),
+    toast: getVal("toastSandwichQty"),
+    toastCheese: getVal("toastCheeseQty")
+  };
+
+  const P = { bhaji: 150, cheese: 15, pav: 10, club: 150, toast: 50, curd: 10, shake: 150, dahimisal: 160 };
+
+  const billDetails = document.getElementById("billDetails");
+  billDetails.innerHTML = "";
+  let total = 0;
+
+  function addRow(symbol, label, qty, unitPrice) {
+    if (qty > 0) {
+      const amount = qty * unitPrice;
+      total += amount;
+      const row = document.createElement("tr");
+      row.innerHTML = `<td>${symbol} ${label} × ${qty}</td><td style="text-align:right">₹${amount}</td>`;
+      billDetails.appendChild(row);
+    }
+  }
+  
+  // Update spice selectors based on quantities
+  updateSpiceSelectors("bhaji", q.bhaji, "bhajiSpiceContainer", "Pav Bhaji");
+  // updateSpiceSelectors("misal", q.club, "misalSpiceContainer", "Misal Pav");
+  updateShakeSelectors(q.tshake);
+  
+  addRow("🍲","Butter Pav Bhaji",q.bhaji,P.bhaji);
+  addRow("🧀","Extra Cheese (Bhaji)",q.bhajiCheese,P.cheese);
+  addRow("🥖","Extra Pav",q.pav,P.pav);
+  addRow("🥘","Misal Pav",q.club,P.club);
+  addRow("🥘","Dahi Misal Pav",q.dmisal,P.dahimisal);
+  addRow("🥖","Extra Pav (Misal)",q.misalpavextra,P.pav);
+  // addRow("🥛","Extra Curd",q.clubcurd,P.curd);
+  addRow("🥤","The Better Thickshake",q.tshake,P.shake);
+  // addRow("🥔","Toast Aaloo Masala Sandwich",q.toast,P.toast);
+  // addRow("🧀","Extra Cheese (Toast)",q.toastCheese,P.cheese);
+
+  // Spice summaries
+  const bhajiSpice = getSpiceSummary("bhaji");
+  if (bhajiSpice.total > 0) {
+    addInfoRow(
+      `• Pav Bhaji spice: ${bhajiSpice.spicyCount} Spicy, ${bhajiSpice.kidsCount} Kids-friendly`,
+      billDetails
+    );
+  }
+
+  // const misalSpice = getSpiceSummary("misal");
+  // if (misalSpice.total > 0) {
+  //   addInfoRow(
+  //     `• Misal Pav spice: ${misalSpice.spicyCount} Spicy, ${misalSpice.kidsCount} Kids-friendly`,
+  //     billDetails
+  //   );
+  // }
+
+  const shakeSelects = document.querySelectorAll(`select[data-item="shake"]`);
+  let plainCount = 0;
+  let kitkatCount = 0;
+
+  shakeSelects.forEach(sel => {
+    if (sel.value === "kitkat") kitkatCount++;
+    else plainCount++;
+  });
+
+  if (shakeSelects.length > 0) {
+    addInfoRow(
+      `• Thickshake flavor: ${plainCount} Plain, ${kitkatCount} KitKat`,
+      billDetails
+    );
+  }
+
+  // Safe fallback for total
+  const safeTotal = total > 0 ? total : 0;
+  document.getElementById("total").innerHTML = `<b>₹${safeTotal}</b>`;
+
+  const now = new Date();
+  const timestamp = now.toLocaleString();
+  const orderId = Math.floor(1000 + Math.random() * 9000);
+  document.getElementById("orderInfo").innerHTML = `Order ID: #${orderId} · ${timestamp}`;
+
+  const qrSection = document.getElementById("qrSection");
+  const qrCode = document.getElementById("qrCode");
+
+if (safeTotal > 0) {
+  qrSection.style.display = "block";
+
+  // Generate UPI QR code with payee and amount
+  const upiLink = `upi://pay?pa=ashwiniss90@okicici&pn=AamchiMumbai&am=${safeTotal}&cu=INR`;
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiLink)}`;
+  qrCode.src = qrUrl;
+
+  // Debug log
+  console.log("UPI QR link:", upiLink);
+} else {
+  qrSection.style.display = "none";
+}
+}
+
+
+    function confirmPayment() {
+      const fileInput = document.getElementById("paymentImage");
+      if (fileInput.files.length > 0) {
+        const status = document.getElementById("paymentStatus");
+        status.textContent = "✅ Payment Screenshot Uploaded";
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = document.createElement("img");
+          img.src = e.target.result;
+          img.style.maxWidth = "200px";
+          img.style.display = "block";
+          img.style.margin = "10px auto 0";
+          status.appendChild(img);
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+      }
+    }
+
+    // Verifying if name, number and location fields are filled
+    function validateCustomerFields() {
+      const name = document.getElementById("customerNameInput")?.value.trim();
+      const phone = document.getElementById("customerPhoneInput")?.value.trim();
+
+      console.log("VALIDATING -> name:", name, "phone:", phone);
+
+      if (!name || !phone) {
+        alert("Please fill in Name and Phone Number above.");
+        return false;
+      }
+
+      return true;
+    }
+
+
+    // Save bill as image with extra right padding
+    function downloadReceipt() {
+      if (!validateCustomerFields()) return; 
+      const receiptClone = document.getElementById("billSummary").cloneNode(true);
+
+      const container = document.createElement("div");
+      container.style.position = "fixed";
+      container.style.left = "-9999px";
+      container.style.top = "0";
+      container.style.background = "#fff";
+      container.style.padding = "20px 60px 20px 20px"; // extra right padding
+      container.style.width = "420px";
+      container.appendChild(receiptClone);
+
+      document.body.appendChild(container);
+      html2canvas(container).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "receipt.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+        document.body.removeChild(container);
+      });
+    }
+
+    // Save confirmed receipt (bill + status + optional image) with right padding
+    function downloadConfirmedReceipt() {
+      if (!validateCustomerFields()) return; 
+      const receiptClone = document.getElementById("billSummary").cloneNode(true);
+      const statusClone = document.getElementById("paymentStatus").cloneNode(true);
+
+      const container = document.createElement("div");
+      container.style.position = "fixed";
+      container.style.left = "-9999px";
+      container.style.top = "0";
+      container.style.background = "#fff";
+      container.style.padding = "20px 60px 20px 20px"; // extra right padding
+      container.style.width = "420px";
+      container.appendChild(receiptClone);
+
+      const confirmed = document.createElement("p");
+      confirmed.style.fontWeight = "bold";
+      confirmed.style.color = "#2e7d32";
+      confirmed.style.marginTop = "10px";
+      confirmed.textContent = statusClone.textContent ? "Payment Confirmed ✅" : "Payment Pending ⏳";
+      container.appendChild(confirmed);
+
+      const img = statusClone.querySelector("img");
+      if (img) {
+        const imgCopy = img.cloneNode(true);
+        imgCopy.style.maxWidth = "320px";
+        imgCopy.style.marginTop = "6px";
+        container.appendChild(imgCopy);
+      }
+
+      document.body.appendChild(container);
+      html2canvas(container).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "confirmed_receipt.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+        document.body.removeChild(container);
+      });
+    }
+  </script>
+</body>
+</html>
