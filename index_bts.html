@@ -18,7 +18,6 @@
       text-align: left;
     }
 
-    /* Row layout for item + dropdown */
     .menu-row {
       display: flex;
       justify-content: space-between;
@@ -31,13 +30,12 @@
       font-weight: bold;
     }
 
-    /* Square, white, centered dropdowns */
     .menu-row select {
       width: 60px;
       padding: 6px;
       font-size: 15px;
       border: 1px solid #ccc;
-      border-radius: 0;       /* square corners */
+      border-radius: 0;
       background: #fff;
       text-align: center;
       appearance: none;
@@ -58,81 +56,86 @@
     .pay { background:#2e7d32; }
     .pay:hover { background:#388e3c; }
 
-.qr {
-  display: flex;
-  flex-direction: column;
-  align-items: center;   /* centers content horizontally */
-  justify-content: center;
-  width: 100%;
-  max-width: 320px;      /* keeps it neat and consistent */
-  margin: 0 auto;        /* center inside parent */
-  padding: 12px;
-  box-sizing: border-box;
-  background: #f9f9f9;   /* optional: match your other boxes */
-  border-radius: 8px;    /* optional: rounded corners */
-}
+    .qr {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 320px;
+      margin: 0 auto;
+      padding: 12px;
+      box-sizing: border-box;
+      background: #f9f9f9;
+      border-radius: 8px;
+    }
 
-.qr input[type="file"] {
-  width: 100%;
-  max-width: 280px;      /* prevents overflow */
-  padding: 6px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-.location-section {
-  margin: 15px 0;
-  font-family: inherit;
-}
+    .qr input[type="file"] {
+      width: 100%;
+      max-width: 280px;
+      padding: 6px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
 
-.location-section label {
-  font-weight: bold;
-  margin-right: 8px;
-}
+    .location-section {
+      margin: 15px 0;
+      font-family: inherit;
+    }
 
-#locationDropdown {
-  padding: 6px 10px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-}
+    .location-section label {
+      font-weight: bold;
+      margin-right: 8px;
+    }
 
-#selectedLocation {
-  margin-top: 8px;
-  font-style: italic;
-  color: #444;
-}
+    #locationDropdown {
+      padding: 6px 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
 
-.spice-container {
-  margin-top: 8px;
-  font-size: 13px;
-}
+    /* Smaller font so it fits on one line */
+    #selectedLocation {
+      margin-top: 8px;
+      font-style: italic;
+      color: #444;
+      font-size: 13px;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
-.spice-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 4px;
-}
+    .spice-container {
+      margin-top: 8px;
+      font-size: 13px;
+    }
 
-.spice-row label {
-  font-weight: normal;
-  font-size: 13px;
-  margin-right: 8px;
-}
+    .spice-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
 
-.spice-row select {
-  padding: 4px 6px;
-  font-size: 13px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
+    .spice-row label {
+      font-weight: normal;
+      font-size: 13px;
+      margin-right: 8px;
+    }
 
+    .spice-row select {
+      padding: 4px 6px;
+      font-size: 13px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
   </style>
 </head>
 <body>
 
   <h2>🍴 Aamchi Mumbai - Fresh and Homemade</h2>
-  <!-- <h2> Order for 29/11/2025</h2> -->
 
   <!-- Customer Details -->
   <div class="product">
@@ -170,40 +173,6 @@
   </div>
   
   <!-- Menu Items -->
-  <!-- <div class="product">
-    <div class="menu-row">
-      <label>🍲 Butter Pav Bhaji (₹150 each)</label>
-      <select id="butterPavBhajiQty" onchange="calculateBill()"></select>
-    </div>
-    Per-item spice selector for Butter Pav Bhaji
-     <div id="bhajiSpiceContainer" class="spice-container"></div>
-    <div class="menu-row">
-      <label>🧀 Extra Cheese (₹15 each)</label>
-      <select id="butterCheeseQty" onchange="calculateBill()"></select>
-    </div>
-    <div class="menu-row">
-      <label>🥖 Extra Pav (₹10 each)</label>
-      <select id="extraPavQty" onchange="calculateBill()"></select>
-    </div>
-  </div> -->
-
-  <!-- <div class="product">
-    <div class="menu-row">
-      <label>🥘 Misal Pav (₹150 each)</label>
-      <select id="MisalpavQty" onchange="calculateBill()"></select>
-    </div>
-    <div class="menu-row">
-      <label>🥘 Dahi Misal Pav (₹160 each)</label>
-      <select id="dahiMisalQty" onchange="calculateBill()"></select>
-    </div>
-    <!Per-item spice selector for Butter Pav Bhaji -->
-    <!-- <div id="misalSpiceContainer" class="spice-container"></div> -->
-    <!-- <div class="menu-row">
-      <label>🥖 Extra Pav (₹10 each)</label>
-      <select id="misalExtraPavQty" onchange="calculateBill()"></select>
-    </div>
-  </div> -->
-
   <div class="product">
     <div class="menu-row">
       <label>🥤 The Better Thickshake (₹150 each)</label>
@@ -212,33 +181,40 @@
     <div id="shakeOptionsContainer" class="spice-container"></div>
   </div>
 
-<!-- Location Dropdown -->
-<div class="location-section">
-  <label for="locationDropdown">Select Location & Time:</label>
-  <select id="locationDropdown">
-    <option value="">-- Choose a location --</option>
-    <option value="Biotech 7.00 pm">Biotech 7.00 pm</option>
-    <option value="NAC-1 7.10 pm">NAC-1 7.10 pm</option>
-    <option value="CCD 7.20 pm">CCD 7.20 pm</option>
-    <option value="Sabarmati 7.30 pm">Sabarmati 7.30 pm</option>
-    <option value="OAT Student Gate 7.40 pm">OAT Student Gate 7.40 pm</option>
-    <option value="Tunga 7.50 pm">Tunga 7.50 pm</option>
-    <option value="Himalaya 8.00 pm">Himalaya 8.00 pm</option>
-    <option value="Pampa 8.10 pm">Pampa 8.10 pm</option>
-    <option value="Mandakini 8.20 pm">Mandakini 8.20 pm</option>
-    <option value="Other">Other</option>
-  </select>
-</div>
+  <!-- Location Dropdown -->
+  <div class="location-section">
+    <label for="locationDropdown">Select Location & Time:</label>
+    <select id="locationDropdown">
+      <option value="">-- Choose a location --</option>
+      <option value="Biotech 7.00 pm">Biotech 7.00 pm</option>
+      <option value="NAC-1 7.10 pm">NAC-1 7.10 pm</option>
+      <option value="CCD 7.20 pm">CCD 7.20 pm</option>
+      <option value="Sabarmati 7.30 pm">Sabarmati 7.30 pm</option>
+      <option value="OAT Student Gate 7.40 pm">OAT Student Gate 7.40 pm</option>
+      <option value="Tunga 7.50 pm">Tunga 7.50 pm</option>
+      <option value="Himalaya 8.00 pm">Himalaya 8.00 pm</option>
+      <option value="Pampa 8.10 pm">Pampa 8.10 pm</option>
+      <option value="Mandakini 8.20 pm">Mandakini 8.20 pm</option>
+      <option value="Other">Other</option>
+    </select>
+  </div>
+
+  <!-- Delivery date -->
+  <div class="location-section">
+    <label for="deliveryDateInput">Delivery Date:</label>
+    <input type="date" id="deliveryDateInput" />
+    <p style="font-size:12px; color:#b33; margin-top:4px;">
+      (*Delivery date is mandatory*)
+    </p>
+  </div>
 
   <!-- Bill Summary -->
   <div class="summary" id="billSummary">
     <h3>Aamchi Mumbai</h3>
-    <!-- Customer info FIRST, bold & bigger -->
     <p id="customerSummary" 
       style="font-size:16px; font-weight:bold; text-align:center; margin:0 0 8px;">
     </p>
 
-    <!-- <h3>🧾 Your Bill Summary for 29/11/2025</h3> -->
     <h3>🧾 Your Bill Summary</h3>
     <table>
       <tbody id="billDetails"></tbody>
@@ -249,15 +225,14 @@
       </tr>
     </table>
     <p id="orderInfo" style="font-size:14px; color:#555; margin-top:10px; text-align:center;"></p>
-  <!-- Location will appear here -->
-  <p id="selectedLocation"></p>
+    <p id="selectedLocation"></p>
   </div>
 
   <!-- QR Code + UPI Deep Link -->
   <div class="qr" id="qrSection" style="display:none;">
     <h3>📲 Scan & Pay</h3>
     <img id="qrCode" alt="Payment QR Code" width="250" height="250" />
-    
+  </div>
 
   <!-- Upload Payment Screenshot -->
   <div class="qr">
@@ -273,11 +248,11 @@
     <p class="hint">Share the confirmed receipt with Aamchi Mumbai to process your order</p>
   </div>
 
-  <!-- html2canvas -->
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   <script>
     let spiceSelections = {};  
     let shakeSelections = {};
+
     function populateSelect(id, max) {
       const select = document.getElementById(id);
       if (!select) return;
@@ -291,28 +266,32 @@
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-      ["butterPavBhajiQty","butterCheeseQty","extraPavQty",
-       "MisalpavQty","dahiMisalQty","misalExtraPavQty","curdQty",
-       "toastSandwichQty","toastCheeseQty","shakeQty"].forEach(id => populateSelect(id, 100));
+      ["shakeQty"].forEach(id => populateSelect(id, 100));
       calculateBill();
-      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-      document.getElementById("mobileHint").style.display = isMobile ? "none" : "block";
+
+      const dateInput = document.getElementById("deliveryDateInput");
+      if (dateInput) {
+        const today = new Date().toISOString().split("T")[0];
+        dateInput.min = today;
+        dateInput.value = today;
+
+        // Whenever date changes, update line + bill
+        dateInput.addEventListener("change", function () {
+          updateLocationAndDateSummary();
+          calculateBill();
+        });
+      }
+
+      const locationDropdown = document.getElementById("locationDropdown");
+      locationDropdown.addEventListener("change", function () {
+        updateLocationAndDateSummary();
+      });
+
+      // Initialise line on first load
+      updateLocationAndDateSummary();
     });
 
-
-document.getElementById("locationDropdown").addEventListener("change", function() {
-  const selected = this.value;
-  const locationDisplay = document.getElementById("selectedLocation");
-  
-  if (selected) {
-    locationDisplay.textContent = "📍 Location: " + selected;
-  } else {
-    locationDisplay.textContent = "";
-  }
-});
-
-
-  function updateCustomerDetails() {
+    function updateCustomerDetails() {
       const nameEl = document.getElementById("customerNameInput");
       const phoneEl = document.getElementById("customerPhoneInput");
       const summaryEl = document.getElementById("customerSummary");
@@ -332,224 +311,154 @@ document.getElementById("locationDropdown").addEventListener("change", function(
 
       summaryEl.textContent = text;
     }
-  // Create per-item thickshake dropdowns for a given item
-  function updateShakeSelectors(qty) {
-  const container = document.getElementById("shakeOptionsContainer");
-  if (!container) return;
 
-  container.innerHTML = "";
+    // Single source of truth for location + date line
+    function updateLocationAndDateSummary() {
+      const location = document.getElementById("locationDropdown").value || "Not selected";
+      const rawDate = document.getElementById("deliveryDateInput").value;
 
-  for (let i = 1; i <= qty; i++) {
-    const row = document.createElement("div");
-    row.className = "spice-row";
-
-    const label = document.createElement("label");
-    label.textContent = `Thickshake #${i}:`;
-
-    const select = document.createElement("select");
-    select.dataset.item = "shake";
-    select.dataset.index = i;
-
-    const optPlain = new Option("🥤 Plain", "plain");
-    const optKitkat = new Option("🍫 KitKat", "kitkat");
-
-    select.appendChild(optPlain);
-    select.appendChild(optKitkat);
-
-    // restore if saved before
-    const key = `shake_${i}`;
-    if (shakeSelections[key]) {
-      select.value = shakeSelections[key];
-    }
-
-    select.addEventListener("change", function() {
-      shakeSelections[key] = this.value;
-      calculateBill();
-    });
-
-    row.appendChild(label);
-    row.appendChild(select);
-    container.appendChild(row);
-  }
-}
-
-  // Create per-item spice dropdowns for a given item
-  function updateSpiceSelectors(itemKey, qty, containerId, labelBase) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-
-  container.innerHTML = "";
-
-  for (let i = 1; i <= qty; i++) {
-    const row = document.createElement("div");
-    row.className = "spice-row";
-
-    const label = document.createElement("label");
-    label.textContent = `${labelBase} #${i} spice:`;
-
-    const select = document.createElement("select");
-    select.dataset.item = itemKey;
-    select.dataset.index = i;
-
-    const optSpicy = new Option("Spicy (default)", "spicy");
-    const optKids = new Option("Kids-friendly", "kids");
-
-    select.appendChild(optSpicy);
-    select.appendChild(optKids);
-
-    // restore saved selection if exists
-    const key = `${itemKey}_${i}`;
-    if (spiceSelections[key]) {
-      select.value = spiceSelections[key];
-    }
-
-    // save when user changes
-    select.addEventListener("change", function() {
-      spiceSelections[key] = this.value;
-      calculateBill();
-    });
-
-    row.appendChild(label);
-    row.appendChild(select);
-    container.appendChild(row);
-  }
-}
-
-  // Count spicy vs kids choices for an item
-  function getSpiceSummary(itemKey) {
-    const selects = document.querySelectorAll(`select[data-item="${itemKey}"]`);
-    let spicyCount = 0;
-    let kidsCount = 0;
-
-    selects.forEach(sel => {
-      if (sel.value === "kids") {
-        kidsCount++;
-      } else {
-        spicyCount++;  // default
+      let formattedDate = "Not selected";
+      if (rawDate) {
+        const d = new Date(rawDate + "T00:00:00");
+        const options = { day: "2-digit", month: "short", year: "numeric" };
+        formattedDate = d.toLocaleDateString("en-IN", options);
       }
-    });
 
-    return { spicyCount, kidsCount, total: selects.length };
-  }
+      const locEl = document.getElementById("selectedLocation");
+      if (locEl) {
+        locEl.textContent = `📍 Location: ${location}   📅 Delivery Date: ${formattedDate}`;
+      }
+    }
 
-  // Add a small info row under the main item line in the bill
-  function addInfoRow(text, billDetails) {
-    const row = document.createElement("tr");
-    row.innerHTML = `<td colspan="2" style="font-size:13px; color:#555; padding-left:12px;">${text}</td>`;
-    billDetails.appendChild(row);
-  }
+    function updateShakeSelectors(qty) {
+      const container = document.getElementById("shakeOptionsContainer");
+      if (!container) return;
 
-  function calculateBill() {
-  const getVal = (id) => {
-    const el = document.getElementById(id);
-    return el ? +el.value : 0;
-  };
+      container.innerHTML = "";
 
-  const q = {
-    bhaji: getVal("butterPavBhajiQty"),
-    bhajiCheese: getVal("butterCheeseQty"),
-    pav: getVal("extraPavQty"),
-    club: getVal("MisalpavQty"),
-    dmisal: getVal("dahiMisalQty"),
-    misalpavextra: getVal("misalExtraPavQty"),
-    // clubcurd: getVal("curdQty"),
-    tshake: getVal("shakeQty"),
-    toast: getVal("toastSandwichQty"),
-    toastCheese: getVal("toastCheeseQty")
-  };
+      for (let i = 1; i <= qty; i++) {
+        const row = document.createElement("div");
+        row.className = "spice-row";
 
-  const P = { bhaji: 150, cheese: 15, pav: 10, club: 150, toast: 50, curd: 10, shake: 150, dahimisal: 160 };
+        const label = document.createElement("label");
+        label.textContent = `Thickshake #${i}:`;
 
-  const billDetails = document.getElementById("billDetails");
-  billDetails.innerHTML = "";
-  let total = 0;
+        const select = document.createElement("select");
+        select.dataset.item = "shake";
+        select.dataset.index = i;
 
-  function addRow(symbol, label, qty, unitPrice) {
-    if (qty > 0) {
-      const amount = qty * unitPrice;
-      total += amount;
+        const optPlain = new Option("🥤 Plain", "plain");
+        const optKitkat = new Option("🍫 KitKat", "kitkat");
+
+        select.appendChild(optPlain);
+        select.appendChild(optKitkat);
+
+        const key = `shake_${i}`;
+        if (shakeSelections[key]) {
+          select.value = shakeSelections[key];
+        }
+
+        select.addEventListener("change", function() {
+          shakeSelections[key] = this.value;
+          calculateBill();
+        });
+
+        row.appendChild(label);
+        row.appendChild(select);
+        container.appendChild(row);
+      }
+    }
+
+    function getSpiceSummary(itemKey) {
+      const selects = document.querySelectorAll(`select[data-item="${itemKey}"]`);
+      let spicyCount = 0;
+      let kidsCount = 0;
+
+      selects.forEach(sel => {
+        if (sel.value === "kids") {
+          kidsCount++;
+        } else {
+          spicyCount++;
+        }
+      });
+
+      return { spicyCount, kidsCount, total: selects.length };
+    }
+
+    function addInfoRow(text, billDetails) {
       const row = document.createElement("tr");
-      row.innerHTML = `<td>${symbol} ${label} × ${qty}</td><td style="text-align:right">₹${amount}</td>`;
+      row.innerHTML = `<td colspan="2" style="font-size:13px; color:#555; padding-left:12px;">${text}</td>`;
       billDetails.appendChild(row);
     }
-  }
-  
-  // Update spice selectors based on quantities
-  updateSpiceSelectors("bhaji", q.bhaji, "bhajiSpiceContainer", "Pav Bhaji");
-  // updateSpiceSelectors("misal", q.club, "misalSpiceContainer", "Misal Pav");
-  updateShakeSelectors(q.tshake);
-  
-  addRow("🍲","Butter Pav Bhaji",q.bhaji,P.bhaji);
-  addRow("🧀","Extra Cheese (Bhaji)",q.bhajiCheese,P.cheese);
-  addRow("🥖","Extra Pav",q.pav,P.pav);
-  addRow("🥘","Misal Pav",q.club,P.club);
-  addRow("🥘","Dahi Misal Pav",q.dmisal,P.dahimisal);
-  addRow("🥖","Extra Pav (Misal)",q.misalpavextra,P.pav);
-  // addRow("🥛","Extra Curd",q.clubcurd,P.curd);
-  addRow("🥤","The Better Thickshake",q.tshake,P.shake);
-  // addRow("🥔","Toast Aaloo Masala Sandwich",q.toast,P.toast);
-  // addRow("🧀","Extra Cheese (Toast)",q.toastCheese,P.cheese);
 
-  // Spice summaries
-  const bhajiSpice = getSpiceSummary("bhaji");
-  if (bhajiSpice.total > 0) {
-    addInfoRow(
-      `• Pav Bhaji spice: ${bhajiSpice.spicyCount} Spicy, ${bhajiSpice.kidsCount} Kids-friendly`,
-      billDetails
-    );
-  }
+    function calculateBill() {
+      const getVal = (id) => {
+        const el = document.getElementById(id);
+        return el ? +el.value : 0;
+      };
 
-  // const misalSpice = getSpiceSummary("misal");
-  // if (misalSpice.total > 0) {
-  //   addInfoRow(
-  //     `• Misal Pav spice: ${misalSpice.spicyCount} Spicy, ${misalSpice.kidsCount} Kids-friendly`,
-  //     billDetails
-  //   );
-  // }
+      const q = {
+        tshake: getVal("shakeQty")
+      };
 
-  const shakeSelects = document.querySelectorAll(`select[data-item="shake"]`);
-  let plainCount = 0;
-  let kitkatCount = 0;
+      const P = { shake: 150 };
 
-  shakeSelects.forEach(sel => {
-    if (sel.value === "kitkat") kitkatCount++;
-    else plainCount++;
-  });
+      const billDetails = document.getElementById("billDetails");
+      billDetails.innerHTML = "";
+      let total = 0;
 
-  if (shakeSelects.length > 0) {
-    addInfoRow(
-      `• Thickshake flavor: ${plainCount} Plain, ${kitkatCount} KitKat`,
-      billDetails
-    );
-  }
+      function addRow(symbol, label, qty, unitPrice) {
+        if (qty > 0) {
+          const amount = qty * unitPrice;
+          total += amount;
+          const row = document.createElement("tr");
+          row.innerHTML = `<td>${symbol} ${label} × ${qty}</td><td style="text-align:right">₹${amount}</td>`;
+          billDetails.appendChild(row);
+        }
+      }
 
-  // Safe fallback for total
-  const safeTotal = total > 0 ? total : 0;
-  document.getElementById("total").innerHTML = `<b>₹${safeTotal}</b>`;
+      updateShakeSelectors(q.tshake);
+      addRow("🥤","The Better Thickshake",q.tshake,P.shake);
 
-  const now = new Date();
-  const timestamp = now.toLocaleString();
-  const orderId = Math.floor(1000 + Math.random() * 9000);
-  document.getElementById("orderInfo").innerHTML = `Order ID: #${orderId} · ${timestamp}`;
+      const shakeSelects = document.querySelectorAll(`select[data-item="shake"]`);
+      let plainCount = 0;
+      let kitkatCount = 0;
 
-  const qrSection = document.getElementById("qrSection");
-  const qrCode = document.getElementById("qrCode");
+      shakeSelects.forEach(sel => {
+        if (sel.value === "kitkat") kitkatCount++;
+        else plainCount++;
+      });
 
-if (safeTotal > 0) {
-  qrSection.style.display = "block";
+      if (shakeSelects.length > 0) {
+        addInfoRow(
+          `• Thickshake flavor: ${plainCount} Plain, ${kitkatCount} KitKat`,
+          billDetails
+        );
+      }
 
-  // Generate UPI QR code with payee and amount
-  const upiLink = `upi://pay?pa=ashwiniss90@okicici&pn=AamchiMumbai&am=${safeTotal}&cu=INR`;
-  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiLink)}`;
-  qrCode.src = qrUrl;
+      const safeTotal = total > 0 ? total : 0;
+      document.getElementById("total").innerHTML = `<b>₹${safeTotal}</b>`;
 
-  // Debug log
-  console.log("UPI QR link:", upiLink);
-} else {
-  qrSection.style.display = "none";
-}
-}
+      const now = new Date();
+      const timestamp = now.toLocaleString();
+      const orderId = Math.floor(1000 + Math.random() * 9000);
+      document.getElementById("orderInfo").innerHTML = `Order ID: #${orderId} · ${timestamp}`;
 
+      // ensure the latest date/location line is in sync
+      updateLocationAndDateSummary();
+
+      const qrSection = document.getElementById("qrSection");
+      const qrCode = document.getElementById("qrCode");
+
+      if (safeTotal > 0) {
+        qrSection.style.display = "block";
+        const upiLink = `upi://pay?pa=ashwiniss90@okicici&pn=AamchiMumbai&am=${safeTotal}&cu=INR`;
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiLink)}`;
+        qrCode.src = qrUrl;
+      } else {
+        qrSection.style.display = "none";
+      }
+    }
 
     function confirmPayment() {
       const fileInput = document.getElementById("paymentImage");
@@ -569,12 +478,9 @@ if (safeTotal > 0) {
       }
     }
 
-    // Verifying if name, number and location fields are filled
     function validateCustomerFields() {
       const name = document.getElementById("customerNameInput")?.value.trim();
       const phone = document.getElementById("customerPhoneInput")?.value.trim();
-
-      console.log("VALIDATING -> name:", name, "phone:", phone);
 
       if (!name || !phone) {
         alert("Please fill in Name and Phone Number above.");
@@ -584,10 +490,8 @@ if (safeTotal > 0) {
       return true;
     }
 
-
-    // Save bill as image with extra right padding
     function downloadReceipt() {
-      if (!validateCustomerFields()) return; 
+      if (!validateCustomerFields()) return;
       const receiptClone = document.getElementById("billSummary").cloneNode(true);
 
       const container = document.createElement("div");
@@ -595,7 +499,7 @@ if (safeTotal > 0) {
       container.style.left = "-9999px";
       container.style.top = "0";
       container.style.background = "#fff";
-      container.style.padding = "20px 60px 20px 20px"; // extra right padding
+      container.style.padding = "20px 60px 20px 20px";
       container.style.width = "420px";
       container.appendChild(receiptClone);
 
@@ -609,9 +513,8 @@ if (safeTotal > 0) {
       });
     }
 
-    // Save confirmed receipt (bill + status + optional image) with right padding
     function downloadConfirmedReceipt() {
-      if (!validateCustomerFields()) return; 
+      if (!validateCustomerFields()) return;
       const receiptClone = document.getElementById("billSummary").cloneNode(true);
       const statusClone = document.getElementById("paymentStatus").cloneNode(true);
 
@@ -620,7 +523,7 @@ if (safeTotal > 0) {
       container.style.left = "-9999px";
       container.style.top = "0";
       container.style.background = "#fff";
-      container.style.padding = "20px 60px 20px 20px"; // extra right padding
+      container.style.padding = "20px 60px 20px 20px";
       container.style.width = "420px";
       container.appendChild(receiptClone);
 
